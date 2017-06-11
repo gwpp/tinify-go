@@ -4,20 +4,17 @@
 
 ------
 
-## 前言（Introduction）
-[Tinypng](https://tinypng.com/)是一个提供图片压缩、修改大小的网站，同时提供了Online、API、PS-Plugin等方式供我们使用，API方面官方提供了许多语言的SDK支持，但遗憾的是并没有golang的，而go-tinypng则是一个`golang sdk for tinypng`，更多信息请参考我的一片博客——[Golang + Tinypng实现图片压缩](http://www.jianshu.com/p/ca8827d8110e).
+## Introduction
+[Tinypng](https://tinypng.com/) is a website of compressed and resize image. It provides the online, api-library, photoshop-plugin for us to use, official api-libraries are available for Ruby, PHP, Node.js, Python, Java and .NET, but no Golang. go-tinypng is an api-library write by Golang, you can use it to compress image or resize image like official api-library. If you want to know more information, you can visit my blog http://www.jianshu.com/p/ca8827d8110e. Thanks.
 
-## 支持（Support）
+## Support
 
-- 图片压缩（Compress）
-- 修改图片大小Resize
+- Compress
+- Resize
 
-## 安装（Installation）
-安装：
+## Installation
 ```
     go get -u github.com/gwpp/go-tinypng
 ```
-导入：
-```
-    import "github.com/gwpp/go-tinypng"
-```
+## Use
+Please see the [tinypng_test.go](tinypng_test.go)
