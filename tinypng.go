@@ -1,72 +1,149 @@
-package main
+package go_tinypng
 
 import (
-	"net/http"
+	"bytes"
+	"encoding/json"
+	"path/filepath"
 
 	"io/ioutil"
 
-	"bytes"
+	"net/http"
 
-	"fmt"
-
-	"time"
-
-	"github.com/astaxie/beego/logs"
+	"errors"
 )
 
 const (
-	CompressingUrl = "https://api.tinify.com/shrink"
-
-	Email  = "ganwenpwng_dev@163.com"
-	ApiKey = "rcPZm3Zrg_1DbjYtV6AXM_-53Jg9wuWB"
+	compressingUrl = "https://api.tinify.com/shrink"
 )
 
-func init() {
-	logs.SetLogFuncCall(true)
-	logs.SetLogFuncCallDepth(3)
+type TinyPngResponse struct {
+	Input struct {
+		Size int64  `json:"size"`
+		Type string `json:"type"`
+	} `json:"input"`
+	Output struct {
+		Size   int64   `json:"size"`
+		Type   string  `json:"type"`
+		Width  int64   `json:"width"`
+		Height int64   `json:"height"`
+		Ratio  float32 `json:"ratio"`
+		Url    string  `json:"url"`
+	} `json:"output"`
 }
 
-func main() {
-	// 创建Request
-	req, err := http.NewRequest(http.MethodPost, CompressingUrl, nil)
+type TinyPng struct {
+	email  string
+	apiKey string
+}
+
+func NewTinyPng(email string, apiKey string) (*TinyPng, error) {
+	if len(email) == 0 {
+		return nil, errors.New("email is required")
+	}
+
+	if len(apiKey) == 0 {
+		return nil, errors.New("apiKey is required")
+	}
+
+	t := new(TinyPng)
+	t.email = email
+	t.apiKey = apiKey
+
+	return t, nil
+}
+
+/**
+ * @param 	path		图片的路径
+ * @return 	ret		压缩后的数据
+ * @return 	error	错误
+ */
+func (t *TinyPng) CompressFile(path string) (ret []byte, err error) {
+	path, err = filepath.Abs(path)
 	if err != nil {
-		logs.Error(err)
 		return
 	}
 
-	// 将鉴权信息写入Request
-	req.SetBasicAuth(Email, ApiKey)
-
-	// 将图片以二进制的形式写入Request
-	data, err := ioutil.ReadFile("test.jpg")
+	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		logs.Error(err)
 		return
 	}
+
+	ret, err = t.compressBytes(data)
+	return
+}
+
+/**
+ * @param 	abs 		图片的URL链接
+ * @return 	ret		压缩后的数据
+ * @return 	error	错误
+ */
+func (t *TinyPng) CompressUrl(url string) (ret []byte, err error) {
+	response, err := http.DefaultClient.Get(url)
+	if err != nil {
+		return
+	}
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return
+	}
+
+	ret, err = t.compressBytes(data)
+	return
+}
+
+/**
+ * @param 	abs 		二进制格式的图片
+ * @return 	ret		压缩后的数据
+ * @return 	error	错误
+ */
+func (t *TinyPng) CompressBytes(data []byte) (ret []byte, err error) {
+	return t.compressBytes(data)
+}
+
+func (t *TinyPng) compressBytes(data []byte) (ret []byte, err error) {
+	// Create request
+	req, err := http.NewRequest(http.MethodPost, compressingUrl, nil)
+	if err != nil {
+		return
+	}
+
+	//  Authentication request
+	req.SetBasicAuth(t.email, t.apiKey)
+
+	// Write picture data to request
 	req.Body = ioutil.NopCloser(bytes.NewReader(data))
 
-	// 发起请求
-	fmt.Print("正在进行网络请求，由于Tinypng是国外网站，国内访问速度可能会比较慢，请稍耐心等待")
-	go func() {
-		for {
-			fmt.Print(".")
-			time.Sleep(1 * time.Second)
-		}
-	}()
+	// Send request
 	response, err := http.DefaultClient.Do(req)
+
 	if err != nil {
-		logs.Error(err)
 		return
 	}
 
-	// 解析请求
-	data, err = ioutil.ReadAll(response.Body)
+	// Parse response
+	jsonData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		logs.Error(err)
 		return
 	}
 
-	fmt.Print("\n")
-	fmt.Println("请求完毕，结果如下：")
-	fmt.Println(string(data))
+	jsonStruct := new(TinyPngResponse)
+	err = json.Unmarshal(jsonData, jsonStruct)
+	if err != nil {
+		return
+	}
+
+	if len(jsonStruct.Output.Url) == 0 {
+		err = errors.New("image url is empty")
+		return
+	}
+
+	response, err = http.DefaultClient.Get(jsonStruct.Output.Url)
+	if err != nil {
+		return
+	}
+
+	ret, err = ioutil.ReadAll(response.Body)
+
+	return
 }
