@@ -24,7 +24,7 @@ func TestCompressFromFile(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("压缩成功")
+	logs.Info("Compress successful")
 }
 
 func TestCompressFromBuffer(t *testing.T) {
@@ -46,7 +46,7 @@ func TestCompressFromBuffer(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("压缩成功")
+	logs.Info("Compress successful")
 }
 
 func TestCompressFromUrl(t *testing.T) {
@@ -62,7 +62,7 @@ func TestCompressFromUrl(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("压缩成功")
+	logs.Info("Compress successful")
 }
 
 func TestResizeFromFile(t *testing.T) {
@@ -88,7 +88,7 @@ func TestResizeFromFile(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("压缩成功")
+	logs.Info("Resize successful")
 }
 
 func TestResizeFromBuffer(t *testing.T) {
@@ -119,7 +119,7 @@ func TestResizeFromBuffer(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("压缩成功")
+	logs.Info("Resize successful")
 }
 
 func TestResizeFromUrl(t *testing.T) {
@@ -146,5 +146,5 @@ func TestResizeFromUrl(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("压缩成功")
+	logs.Info("Resize successful")
 }
