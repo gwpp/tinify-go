@@ -1,13 +1,26 @@
 package Tinify
 
 import (
-	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/astaxie/beego/logs"
 )
+
+const (
+	ResizeMethodScale = "scale"
+	ResizeMethodFit   = "fit"
+	ResizeMethodCover = "cover"
+)
+
+type ResizeMethod string
+
+type ResizeOption struct {
+	Method ResizeMethod `json:"method"`
+	Width  int64        `json:"width"`
+	Height int64        `json:"height"`
+}
 
 type Source struct {
 	url      string
@@ -17,7 +30,12 @@ type Source struct {
 func newSource(url string, commands map[string]interface{}) *Source {
 	s := new(Source)
 	s.url = url
-	s.commands = commands
+	if commands != nil {
+		s.commands = commands
+	} else {
+		s.commands = make(map[string]interface{})
+	}
+
 	return s
 }
 
@@ -83,20 +101,30 @@ func (s *Source) ToFile(path string) error {
 	return result.ToFile(path)
 }
 
+func (s *Source) Resize(option *ResizeOption) error {
+	if option == nil {
+		return errors.New("option is required")
+	}
+
+	s.commands["resize"] = option
+
+	return nil
+}
+
 func (s *Source) toResult() (r *Result, err error) {
 	if len(s.url) == 0 {
 		err = errors.New("url is empty")
 		return
 	}
 
-	body := make([]byte, 0)
-	if len(s.commands) > 0 {
-		body, err = json.Marshal(s.commands)
-		if err != nil {
-			return
-		}
-	}
-	response, err := GetClient().Request(http.MethodGet, s.url, body)
+	//body := make([]byte, 0)
+	//if len(s.commands) > 0 {
+	//	body, err = json.Marshal(s.commands)
+	//	if err != nil {
+	//		return
+	//	}
+	//}
+	response, err := GetClient().Request(http.MethodGet, s.url, s.commands)
 	if err != nil {
 		return
 	}
