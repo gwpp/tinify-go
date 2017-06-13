@@ -65,9 +65,9 @@ go get -u github.com/gwpp/go-tinify
     logs.Info("Resize successful")
     ```
 
-    - ***notice:***
+- ***notice:***
 
-        Tinify.ResizeMethod support `scale`, `fit`, `cover`. If used fit or cover, you must provide `both a width and a height`. but used scale, you must provide either a target width or a target height, `but not both`.
+    Tinify.ResizeMethod support `scale`, `fit` and `cover`. If used fit or cover, you must provide `both a width and a height`. But used scale, you must provide either a target width or a target height, `but not both`.
 
 
 - More usage, please see [tinify_test.go](./tinify_test.go)
