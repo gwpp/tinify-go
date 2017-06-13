@@ -17,6 +17,7 @@ go get -u github.com/gwpp/tinify-go
 ## Usage
 
 - About key
+
     Get your API key from  https://tinypng.com/developers
 
 - Compress
