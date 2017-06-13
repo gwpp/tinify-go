@@ -1,5 +1,7 @@
 # Tinify API client for Golang
 
+[:book: 国内的朋友看这里](http://www.jianshu.com/p/5c4161db4ac8)
+
 Golang client for the Tinify API, used for [TinyPNG](https://tinypng.com) and [TinyJPG](https://tinyjpg.com). Tinify compresses or resize your images intelligently. Read more at [http://tinify.com](http://tinify.com).
 
 ## Documentation
