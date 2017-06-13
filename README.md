@@ -1,20 +1,84 @@
-# go-tinypng
+# Tinify API client for Golang
 
-:book: English Documentation | [:book: 中文文档](README-CN.md)
+Golang client for the Tinify API, used for [TinyPNG](https://tinypng.com) and [TinyJPG](https://tinyjpg.com). Tinify compresses or resize your images intelligently. Read more at [http://tinify.com](http://tinify.com).
 
-------
+## Documentation
 
-## Introduction
-[Tinypng](https://tinypng.com/) is a website of compressed and resize image. It provides the online, api-library, photoshop-plugin for us to use, official api-libraries are available for Ruby, PHP, Node.js, Python, Java and .NET, but no Golang. go-tinypng is an api-library write by Golang, you can use it to compress image or resize image like official api-library. If you want to know more information, you can visit my blog http://www.jianshu.com/p/ca8827d8110e. Thanks.
-
-## Support
-
-- Compress
-- Resize
+[Go to the documentation for the HTTP client](https://tinypng.com/developers/reference).
 
 ## Installation
+
+Install the API client with `go get`.
+
+```shell
+go get -u github.com/gwpp/go-tinify
 ```
-    go get -u github.com/gwpp/go-tinypng
+
+## Usage
+
+- compress
+    ```golang
+    Tinify.SetKey(Key)
+    source, err := Tinify.FromFile("./test.jpg")
+    if err != nil {
+        t.Error(err)
+        return
+    }
+
+    err = source.ToFile("./test_output/CompressFromFile.jpg")
+    if err != nil {
+        t.Error(err)
+        return
+    }
+    logs.Info("Compress successful")
+    ```
+
+- resize
+    ```golang
+    Tinify.SetKey(Key)
+
+    buf, err := ioutil.ReadFile("./test.jpg")
+    if err != nil {
+        t.Error(err)
+        return
+    }
+    source, err := Tinify.FromBuffer(buf)
+    if err != nil {
+        t.Error(err)
+        return
+    }
+
+    err = source.Resize(&Tinify.ResizeOption{
+        Method: Tinify.ResizeMethodScale,
+        Width:  200,
+    })
+    if err != nil {
+        t.Error(err)
+        return
+    }
+
+    err = source.ToFile("./test_output/ResizesFromBuffer.jpg")
+    if err != nil {
+        t.Error(err)
+        return
+    }
+    logs.Info("Resize successful")
+    ```
+
+    - ***notice:***
+
+        Tinify.ResizeMethod support `scale`, `fit`, `cover`. If used fit or cover, you must provide `both a width and a height`. but used scale, you must provide either a target width or a target height, `but not both`.
+
+
+- More usage, please see [tinify_test.go](./tinify_test.go)
+
+## Running tests
+
+```shell
+cd $GOPATH/src/github.com/gwpp/go-tinify
+go test
 ```
-## Use
-Please see the [tinypng_test.go](tinypng_test.go)
+
+## License
+
+This software is licensed under the MIT License. [View the license](LICENSE).
