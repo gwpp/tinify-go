@@ -30,7 +30,7 @@ go get -u github.com/gwpp/tinify-go
         t.Error(err)
         return
     }
-    logs.Info("Compress successful")
+    t.Log("Compress successful")
     ```
 
 - resize
@@ -62,7 +62,7 @@ go get -u github.com/gwpp/tinify-go
         t.Error(err)
         return
     }
-    logs.Info("Resize successful")
+    t.Log("Resize successful")
     ```
 
 - ***notice:***
