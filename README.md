@@ -16,7 +16,10 @@ go get -u github.com/gwpp/tinify-go
 
 ## Usage
 
-- compress
+- About key
+    Get your API key from  https://tinypng.com/developers
+
+- Compress
     ```golang
     func TestCompressFromFile(t *testing.T) {
         Tinify.SetKey(Key)
@@ -35,7 +38,7 @@ go get -u github.com/gwpp/tinify-go
     }
     ```
 
-- resize
+- Resize
     ```golang
     func TestResizeFromBuffer(t *testing.T) {
         Tinify.SetKey(Key)
@@ -69,7 +72,7 @@ go get -u github.com/gwpp/tinify-go
     }
     ```
 
-- ***notice:***
+- ***Notice:***
 
     Tinify.ResizeMethod support `scale`, `fit` and `cover`. If used fit or cover, you must provide `both a width and a height`. But used scale, you must provide either a target width or a target height, `but not both`.
 
