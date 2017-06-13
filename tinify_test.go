@@ -5,8 +5,7 @@ import (
 
 	"io/ioutil"
 
-	"github.com/astaxie/beego/logs"
-	"github.com/gwpp/go-tinypng/tinify"
+	"github.com/gwpp/tinify-go/tinify"
 )
 
 const Key = "rcPZm3Zrg_1DbjYtV6AXM_-53Jg9wuWB"
@@ -24,7 +23,7 @@ func TestCompressFromFile(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("Compress successful")
+	t.Log("Compress successful")
 }
 
 func TestCompressFromBuffer(t *testing.T) {
@@ -46,7 +45,7 @@ func TestCompressFromBuffer(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("Compress successful")
+	t.Log("Compress successful")
 }
 
 func TestCompressFromUrl(t *testing.T) {
@@ -62,7 +61,7 @@ func TestCompressFromUrl(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("Compress successful")
+	t.Log("Compress successful")
 }
 
 func TestResizeFromFile(t *testing.T) {
@@ -88,7 +87,8 @@ func TestResizeFromFile(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("Resize successful")
+
+	t.Log("Resize successful")
 }
 
 func TestResizeFromBuffer(t *testing.T) {
@@ -119,7 +119,7 @@ func TestResizeFromBuffer(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("Resize successful")
+	t.Log("Resize successful")
 }
 
 func TestResizeFromUrl(t *testing.T) {
@@ -146,5 +146,5 @@ func TestResizeFromUrl(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	logs.Info("Resize successful")
+	t.Log("Resize successful")
 }

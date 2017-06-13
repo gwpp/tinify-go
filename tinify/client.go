@@ -6,13 +6,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/astaxie/beego/logs"
 )
 
 const API_ENDPOINT = "https://api.tinify.com"
-const RETRY_COUNT = 1
-const RETRY_DELAY = 500
 
 type Client struct {
 	options map[string]interface{}
@@ -34,7 +30,6 @@ func (c *Client) Request(method string, url string, body interface{}) (response 
 	if err != nil {
 		return
 	}
-	logs.Info(body)
 
 	switch body.(type) {
 	case []byte:
@@ -51,12 +46,9 @@ func (c *Client) Request(method string, url string, body interface{}) (response 
 			req.Body = ioutil.NopCloser(bytes.NewReader(body2))
 		}
 		req.Header["Content-Type"] = []string{"application/json"}
-		logs.Info("%+v", req.Header)
 	}
 
 	req.SetBasicAuth("api", c.key)
-
-	logs.Info("%+v", req)
 
 	response, err = http.DefaultClient.Do(req)
 	return

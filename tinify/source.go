@@ -4,8 +4,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/astaxie/beego/logs"
 )
 
 const (
@@ -59,7 +57,6 @@ func FromBuffer(buf []byte) (s *Source, err error) {
 }
 
 func FromUrl(url string) (s *Source, err error) {
-	logs.Info(url)
 	if len(url) == 0 {
 		err = errors.New("url is required")
 		return
@@ -82,7 +79,6 @@ func FromUrl(url string) (s *Source, err error) {
 
 func getSourceFromResponse(response *http.Response) (s *Source, err error) {
 	location := response.Header["Location"]
-	logs.Info("%+v", response.Header)
 	url := ""
 	if len(location) > 0 {
 		url = location[0]
