@@ -133,3 +133,30 @@ func (s *Source) toResult() (r *Result, err error) {
 	r = NewResult(response.Header, data)
 	return
 }
+
+func (s *Source) ToRawResult() (r *Result, err error) {
+	if len(s.url) == 0 {
+		err = errors.New("url is empty")
+		return
+	}
+
+	//body := make([]byte, 0)
+	//if len(s.commands) > 0 {
+	//	body, err = json.Marshal(s.commands)
+	//	if err != nil {
+	//		return
+	//	}
+	//}
+	response, err := GetClient().Request(http.MethodGet, s.url, s.commands)
+	if err != nil {
+		return
+	}
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return
+	}
+
+	r = NewResult(response.Header, data)
+	return
+}
